@@ -1,4 +1,4 @@
-import knexfile from "../knexfile.js";
+import knexfile from '../config/knexfile.js';
 const dbConfig = knexfile.connection;
 
 /**

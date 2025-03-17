@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "setup": "node dbSetup.js && npx knex migrate:latest",
-    "migrate": "npx knex migrate:latest",
-    "rollback": "npx knex migrate:rollback",
+    "setup": "node scripts/dbSetup.js && npx knex migrate:latest --knexfile=./config/knexfile.js",
+    "migrate": "npx knex migrate:latest --knexfile=./config/knexfile.js",
+    "rollback": "npx knex migrate:rollback --knexfile=./config/knexfile.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },

@@ -1,5 +1,5 @@
 import pkg from 'pg';
-import knexFileConfig from './knexfile.js';
+import knexFileConfig from '../config/knexfile.js';
 
 const { Client, Pool } = pkg;
 const knexDbConfig = knexFileConfig.connection;
@@ -15,7 +15,7 @@ const createDB = async () => {
 
     dbConfig.database = knexDbConfig.database; // set the database back to the original database
     const query = `CREATE DATABASE ${dbConfig.database} WITH OWNER ${dbConfig.user}`;
-    // console.log('Creating database:', query);
+    console.log('Creating database:', query);
     let dbCreated = false;
 
     try {
@@ -25,6 +25,7 @@ const createDB = async () => {
         dbCreated = true;
     } catch (err) {
         console.log(err.message);
+        if (err.message.includes('already exists')) dbCreated = true;
     }
 
     await client.end();

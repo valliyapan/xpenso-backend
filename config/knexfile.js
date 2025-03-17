@@ -1,5 +1,9 @@
 import dotenv from 'dotenv';
-dotenv.config();
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../.env')});
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }
@@ -12,7 +16,7 @@ const commonConfig = {
     max: 10
   },
   migrations: {
-    directory: './migrations',
+    directory: '../migrations',
     tableName: 'knex_migrations',
     schemaName: process.env.SCHEMA,
   }
