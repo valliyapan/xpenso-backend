@@ -1,3 +1,8 @@
+/**
+ * This file is used to connect to the database
+ * This db connection will be used by all of the model files
+ */
+
 import knex from 'knex';
 import knexFileConfig from './knexfile.js';
 
