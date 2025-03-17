@@ -10,12 +10,15 @@ const knexDbConfig = knexFileConfig.connection;
 
 const createDB = async () => {
     const dbConfig = JSON.parse(JSON.stringify(knexDbConfig));
-    dbConfig.database = 'postgres'; // set the default postgres database for the connection config
+
+    // To create a database, we need to connect to the default postgres database
+    dbConfig.database = 'postgres';
     const client = new Client(dbConfig);
 
-    dbConfig.database = knexDbConfig.database; // set the database back to the original database
+    dbConfig.database = knexDbConfig.database; // Reset the database name
     const query = `CREATE DATABASE ${dbConfig.database} WITH OWNER ${dbConfig.user}`;
-    console.log('Creating database:', query);
+    // console.log('Creating database:', query);
+
     let dbCreated = false;
 
     try {
