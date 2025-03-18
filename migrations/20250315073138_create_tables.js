@@ -38,8 +38,8 @@ export async function up (knex) {
     table.string('account_no').notNullable();
     table.string('bank_name').notNullable();
     table.integer('user_id').notNullable();
-    table.integer('balance').notNullable();
-    table.timestamp('last_sync');
+    table.specificType('balance', 'MONEY').notNullable().defaultTo(0);
+    table.date('last_sync');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('update_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_accounts_user').references('id').inTable('users').onDelete('CASCADE');
@@ -54,9 +54,9 @@ export async function up (knex) {
     table.integer('user_id').notNullable();
     table.text('bank_name').notNullable();
     table.string('account_no').notNullable();
-    table.date('date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
+    table.date('expense_date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
     table.integer('category_id').notNullable();
-    table.integer('amount').notNullable();
+    table.specificType('amount', 'MONEY').notNullable();
     table.string('name').notNullable();
     table.string('comment').notNullable();
     table.string('debit_to');
@@ -71,9 +71,8 @@ export async function up (knex) {
     table.integer('user_id').notNullable();
     table.text('bank_name').notNullable();
     table.string('account_no').notNullable();
-    table.date('date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
-    table.integer('amount').notNullable();
-    table.string('name').notNullable();
+    table.date('credit_date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
+    table.specificType('amount', 'MONEY').notNullable();
     table.string('credit_from');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
@@ -84,7 +83,7 @@ export async function up (knex) {
     table.integer('user_id').notNullable();
     table.string('name').notNullable();
     table.integer('category_id').notNullable();
-    table.integer('expense_limit').notNullable();
+    table.specificType('expense_limit', 'MONEY').notNullable();
     table.integer('limit_duration').notNullable();
     table.string('description');
     table.timestamp('created_at').defaultTo(knex.fn.now());
@@ -101,12 +100,12 @@ export async function up (knex) {
 
   await knex.raw(`
     CREATE INDEX IF NOT EXISTS expenses_idx 
-    ON expenses (user_id, date);
+    ON expenses (user_id, expense_date);
   `);
 
   await knex.raw(`
     CREATE INDEX IF NOT EXISTS credits_idx 
-    ON credits (user_id, date);
+    ON credits (user_id, credit_date);
   `);
 
   console.log('** Migration complete **');
