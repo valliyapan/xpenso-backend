@@ -45,7 +45,7 @@ export async function up (knex) {
     table.foreign('user_id', 'fk_accounts_user').references('id').inTable('users').onDelete('CASCADE');
     table.primary(['bank_name', 'account_no']);
   })
-  .createTable('category', (table) => {
+  .createTable('categories', (table) => {
     table.specificType('id', 'INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
     table.string('name').notNullable();
   })
@@ -64,7 +64,7 @@ export async function up (knex) {
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_expenses_user').references('id').inTable('users').onDelete('CASCADE');
     table.foreign(['bank_name', 'account_no'], 'fk_expenses_account').references(['bank_name', 'account_no']).inTable('accounts').onDelete('CASCADE').onUpdate('CASCADE');
-    table.foreign('category_id', 'fk_expenses_category').references('id').inTable('category').onDelete('CASCADE');
+    table.foreign('category_id', 'fk_expenses_category').references('id').inTable('categories').onDelete('CASCADE');
   })
   .createTable('credits', (table) => {
     table.specificType('id', 'BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
@@ -89,7 +89,7 @@ export async function up (knex) {
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_alarms_user').references('id').inTable('users').onDelete('CASCADE');
-    table.foreign('category_id', 'fk_alarms_category').references('id').inTable('category').onDelete('CASCADE');
+    table.foreign('category_id', 'fk_alarms_category').references('id').inTable('categories').onDelete('CASCADE');
     table.primary(['user_id', 'category_id']);
   });
 
@@ -130,7 +130,7 @@ export async function down (knex) {
   await knex.schema.dropTableIfExists('alarms')
   .dropTableIfExists('credits')
   .dropTableIfExists('expenses')
-  .dropTableIfExists('category')
+  .dropTableIfExists('categories')
   .dropTableIfExists('accounts')
   .dropTableIfExists('users');
 

@@ -40,3 +40,9 @@ PROD_DB_PORT=5432
 ```
 npm run setup
 ```
+
+5. To seed the dummy data to the database created, run the below command
+
+```
+npm run seed
+```

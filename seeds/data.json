@@ -1,0 +1,201 @@
+{
+    "users": [
+        {
+            "name": "Valliyapan SM",
+            "email": "example01@gmail.com",
+            "password": "password"
+        },
+        {
+            "name": "Shriram V",
+            "email": "example02@gmail.com",
+            "password": "password"
+        },
+        {
+            "name": "Sai G",
+            "email": "example03@gmail.com",
+            "password": "password"
+        },
+        {
+            "name": "Rajesh",
+            "email": "example04@gmail.com",
+            "password": "password"
+        }
+    ],
+    "categories": [
+        {
+            "name": "Food"
+        },
+        {
+            "name": "Travel"
+        },
+        {
+            "name": "Shopping"
+        },
+        {
+            "name": "Health"
+        }
+    ],
+    "accounts": [
+        {
+            "account_no": "1234567890",
+            "bank_name": "HDFC",
+            "user_id": 1,
+            "balance": 10000.45
+        },
+        {
+            "account_no": "2345678901",
+            "bank_name": "ICICI",
+            "user_id": 2,
+            "balance": 50000.23,
+            "last_sync": "2025-03-16"
+        },
+        {
+            "account_no": "3456789012",
+            "bank_name": "SBI",
+            "user_id": 3,
+            "balance": 50000.27
+        },
+        {
+            "account_no": "4567890123",
+            "bank_name": "AXIS",
+            "user_id": 1,
+            "balance": 40000
+        },
+        {
+            "account_no": "5678901234",
+            "bank_name": "KVB",
+            "user_id": 4,
+            "balance": 30000
+        }
+    ],
+    "credits": [
+        {
+            "user_id": 1,
+            "account_no": "1234567890",
+            "bank_name": "HDFC",
+            "amount": 1000.50,
+            "credit_from": "Siddharth",
+            "credit_date": "2025-03-17"
+        },
+        {
+            "user_id": 2,
+            "account_no": "2345678901",
+            "bank_name": "ICICI",
+            "amount": 2000,
+            "credit_from": "Sampath",
+            "credit_date": "2025-03-16"
+        },
+        {
+            "user_id": 3,
+            "account_no": "3456789012",
+            "amount": 3000.65,
+            "bank_name": "SBI",
+            "credit_from": "Sanjay",
+            "credit_date": "2025-03-18"
+        },
+        {
+            "user_id": 4,
+            "account_no": "5678901234",
+            "bank_name": "KVB",
+            "amount": 4000,
+            "credit_from": "Saravanan",
+            "credit_date": "2025-03-15"
+        }
+    ],
+    "expenses": [
+        {
+            "user_id": 1,
+            "bank_name": "HDFC",
+            "account_no": "1234567890",
+            "amount": 1000.45,
+            "category_id": 1,
+            "expense_date": "2025-03-17",
+            "name": "Bay grills",
+            "debit_to": "Bay Grills Restaurant",
+            "comment": "Birthday treat at Bay Grills"
+        },
+        {
+            "user_id": 2,
+            "bank_name": "ICICI",
+            "account_no": "2345678901",
+            "amount": 5000,
+            "category_id": 2,
+            "expense_date": "2025-03-16",
+            "name": "Flight charge",
+            "debit_to": "Air India",
+            "comment": "Goa trip with friends"
+        },
+        {
+            "user_id": 3,
+            "bank_name": "SBI",
+            "account_no": "3456789012",
+            "amount": 30000,
+            "category_id": 3,
+            "expense_date": "2025-03-18",
+            "name": "Amazon",
+            "debit_to": "Amazon",
+            "comment": "Laptop purchase at Amazon"
+        },
+        {
+            "user_id": 1,
+            "bank_name": "AXIS",
+            "account_no": "4567890123",
+            "amount": 4000.50,
+            "category_id": 1,
+            "expense_date": "2025-03-15",
+            "name": "KFC",
+            "debit_to": "KFC",
+            "comment": "KFC lunch"
+        }
+    ],
+    "alarms": [
+        {
+            "user_id": 1,
+            "category_id": 1,
+            "name": "Food expense crossed 5000",
+            "limit_duration": 3,
+            "expense_limit": 5000.50,
+            "description": "You have crossed the food expense limit of 5000 within 3 days. Make sure to split if you are spending for others."
+        },
+        {
+            "user_id": 2,
+            "category_id": 2,
+            "name": "Travel expense crossed 10000",
+            "limit_duration": 5,
+            "expense_limit": 10000,
+            "description": "You have crossed the travel expense limit of 10000 within 5 days."
+        },
+        {
+            "user_id": 3,
+            "category_id": 3,
+            "name": "Shopping expense crossed 20000",
+            "limit_duration": 7,
+            "expense_limit": 20000,
+            "description": "You have crossed the shopping expense limit of 20000 within 7 days. Check the statistics to learn more."
+        },
+        {
+            "user_id": 4,
+            "category_id": 4,
+            "name": "Health expense crossed 10000",
+            "limit_duration": 10,
+            "expense_limit": 10000,
+            "description": "You have crossed the health expense limit of 10000 within 10 days. Check the statistics to learn more."
+        },
+        {
+            "user_id": 3,
+            "category_id": 1,
+            "name": "Food expense crossed 5000",
+            "limit_duration": 3,
+            "expense_limit": 5000.50,
+            "description": "You have crossed the food expense limit of 5000 within 3 days. Make sure to split if you are spending for others."
+        },
+        {
+            "user_id": 2,
+            "category_id": 1,
+            "name": "Food expense crossed 15000",
+            "limit_duration": 10,
+            "expense_limit": 15000,
+            "description": "You have crossed the food expense limit of 15000 within 10 days."
+        }
+    ]
+}

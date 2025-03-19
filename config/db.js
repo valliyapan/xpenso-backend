@@ -6,20 +6,17 @@
 import knex from 'knex';
 import knexFileConfig from './knexfile.js';
 
-
 const dbConfig = knexFileConfig;
 const db = knex(dbConfig);
 
-// check the database connection
-
-db.raw('SELECT 1')
-.then((resp) => {
-  // console.log(resp.rows[0]);
-  console.log('Database connection established');
-})
-.catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+(async () => {
+  try {
+    const resp = await db.raw(`SELECT current_schema();`);
+    console.log('Current Schema:', resp.rows[0]);
+  } catch (err) {
+    console.error('Database connection failed:', err.message);
+    process.exit(1); // Exit if DB connection fails
+  }
+})();
 
 export default db;
