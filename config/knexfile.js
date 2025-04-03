@@ -19,7 +19,8 @@ const commonConfig = {
     directory: '../migrations',
     tableName: 'knex_migrations',
     schemaName: process.env.SCHEMA,
-  }
+  },
+  searchPath: process.env.SCHEMA, // set search_path to schema
 };
 
 const config = {
@@ -31,7 +32,6 @@ const config = {
       database: process.env.DEV_DB_NAME,
       port: process.env.DEV_DB_PORT,
       schema: process.env.SCHEMA,
-      searchPath: process.env.SCHEMA,
     },
     ...commonConfig
   },
@@ -43,7 +43,6 @@ const config = {
       database: process.env.STAGE_DB_NAME,
       port: process.env.STAGE_DB_PORT,
       schema: process.env.SCHEMA,
-      searchPath: process.env.SCHEMA,
     },
     ...commonConfig
   },
@@ -55,7 +54,6 @@ const config = {
       database: process.env.PROD_DB_NAME,
       port: process.env.PROD_DB_PORT,
       schema: process.env.SCHEMA,
-      searchPath: process.env.SCHEMA,
     },
     ...commonConfig
   }

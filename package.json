@@ -7,6 +7,7 @@
     "setup": "node scripts/dbSetup.js && npx knex migrate:latest --knexfile=./config/knexfile.js",
     "migrate": "npx knex migrate:latest --knexfile=./config/knexfile.js",
     "rollback": "npx knex migrate:rollback --knexfile=./config/knexfile.js",
+    "seed": "cd seeds && node seed_data.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
