@@ -11,8 +11,11 @@ const db = knex(dbConfig);
 
 (async () => {
   try {
-    const resp = await db.raw(`SELECT current_schema();`);
+    let resp = await db.raw(`SELECT current_schema();`);
     console.log('Current Schema:', resp.rows[0]);
+    await db.raw('SET lc_monetary = "en_IN";');
+    resp = await db.raw('SHOW lc_monetary;');
+    console.log('Locale Monetary:', resp.rows[0]);
   } catch (err) {
     console.error('Database connection failed:', err.message);
     process.exit(1); // Exit if DB connection fails
