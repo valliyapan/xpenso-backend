@@ -4,9 +4,22 @@
   "description": "",
   "main": "server.js",
   "scripts": {
+    "setup": "node scripts/dbSetup.js && npx knex migrate:latest --knexfile=./config/knexfile.js",
+    "migrate": "npx knex migrate:latest --knexfile=./config/knexfile.js",
+    "rollback": "npx knex migrate:rollback --knexfile=./config/knexfile.js",
+    "seed": "cd seeds && node seed_data.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Valliyapan",
+  "license": "ISC",
+  "type": "module",
+  "engines": {
+    "node": "^22.13.1"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "knex": "^3.1.0",
+    "pg": "^8.14.0"
+  }
 }
