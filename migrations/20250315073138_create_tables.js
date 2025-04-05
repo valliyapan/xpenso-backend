@@ -35,6 +35,7 @@ export async function up (knex) {
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   })
   .createTable('accounts', (table) => {
+    table.specificType('id', 'INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
     table.string('account_no').notNullable();
     table.string('bank_name').notNullable();
     table.integer('user_id').notNullable();
@@ -43,7 +44,7 @@ export async function up (knex) {
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('update_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_accounts_user').references('id').inTable('users').onDelete('CASCADE');
-    table.primary(['bank_name', 'account_no']);
+    table.unique(['bank_name', 'account_no']);
   })
   .createTable('categories', (table) => {
     table.specificType('id', 'INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
@@ -52,8 +53,7 @@ export async function up (knex) {
   .createTable('expenses', (table) => {
     table.specificType('id', 'BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
     table.integer('user_id').notNullable();
-    table.text('bank_name').notNullable();
-    table.string('account_no').notNullable();
+    table.integer('account_id').notNullable();
     table.date('expense_date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
     table.integer('category_id').notNullable();
     table.specificType('amount', 'MONEY').notNullable();
@@ -63,21 +63,20 @@ export async function up (knex) {
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_expenses_user').references('id').inTable('users').onDelete('CASCADE');
-    table.foreign(['bank_name', 'account_no'], 'fk_expenses_account').references(['bank_name', 'account_no']).inTable('accounts').onDelete('CASCADE').onUpdate('CASCADE');
+    table.foreign('account_id', 'fk_expenses_account').references('id').inTable('accounts').onDelete('CASCADE').onUpdate('CASCADE');
     table.foreign('category_id', 'fk_expenses_category').references('id').inTable('categories').onDelete('CASCADE');
   })
   .createTable('credits', (table) => {
     table.specificType('id', 'BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1)');
     table.integer('user_id').notNullable();
-    table.text('bank_name').notNullable();
-    table.string('account_no').notNullable();
+    table.integer('account_id').notNullable();
     table.date('credit_date').notNullable().defaultTo(knex.raw('CURRENT_DATE'));
     table.specificType('amount', 'MONEY').notNullable();
     table.string('credit_from');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_credits_user').references('id').inTable('users').onDelete('CASCADE');
-    table.foreign(['bank_name', 'account_no'], 'fk_credits_account').references(['bank_name', 'account_no']).inTable('accounts').onDelete('CASCADE').onUpdate('CASCADE');
+    table.foreign('account_id', 'fk_credits_account').references('id').inTable('accounts').onDelete('CASCADE').onUpdate('CASCADE');
   })
   .createTable('alarms', (table) => {
     table.integer('user_id').notNullable();
