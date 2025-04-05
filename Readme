@@ -6,9 +6,7 @@ Steps to setup database in local machine:
 
 2. Run below command to install dependencies
 
-```
-npm i
-```
+> npm i
 
 3. Create the .env file with the db credentials
 
