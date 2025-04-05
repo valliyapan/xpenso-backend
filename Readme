@@ -6,13 +6,13 @@ Steps to setup database in local machine:
 
 2. Run below command to install dependencies
 
-```
+```sh
 npm i
 ```
 
 3. Create the .env file with the db credentials
 
-```
+```sh
 NODE_ENV=development
 SCHEMA=xpenso
 
@@ -37,12 +37,12 @@ PROD_DB_PORT=5432
 
 4. Now run the below command to setup the database locally
 
-```
+```sh
 npm run setup
 ```
 
 5. To seed the dummy data to the database created, run the below command
 
-```
+```sh
 npm run seed
 ```
