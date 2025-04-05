@@ -71,32 +71,28 @@
     "credits": [
         {
             "user_id": 1,
-            "account_no": "1234567890",
-            "bank_name": "HDFC",
+            "account_id": 1,
             "amount": 1000.50,
             "credit_from": "Siddharth",
             "credit_date": "2025-03-17"
         },
         {
             "user_id": 2,
-            "account_no": "2345678901",
-            "bank_name": "ICICI",
+            "account_id": 2,
             "amount": 2000,
             "credit_from": "Sampath",
             "credit_date": "2025-03-16"
         },
         {
             "user_id": 3,
-            "account_no": "3456789012",
+            "account_id": 3,
             "amount": 3000.65,
-            "bank_name": "SBI",
             "credit_from": "Sanjay",
             "credit_date": "2025-03-18"
         },
         {
             "user_id": 4,
-            "account_no": "5678901234",
-            "bank_name": "KVB",
+            "account_id": 5,
             "amount": 4000,
             "credit_from": "Saravanan",
             "credit_date": "2025-03-15"
@@ -105,8 +101,7 @@
     "expenses": [
         {
             "user_id": 1,
-            "bank_name": "HDFC",
-            "account_no": "1234567890",
+            "account_id": 1,
             "amount": 1000.45,
             "category_id": 1,
             "expense_date": "2025-03-17",
@@ -116,8 +111,7 @@
         },
         {
             "user_id": 2,
-            "bank_name": "ICICI",
-            "account_no": "2345678901",
+            "account_id": 2,
             "amount": 5000,
             "category_id": 2,
             "expense_date": "2025-03-16",
@@ -127,8 +121,7 @@
         },
         {
             "user_id": 3,
-            "bank_name": "SBI",
-            "account_no": "3456789012",
+            "account_id": 3,
             "amount": 30000,
             "category_id": 3,
             "expense_date": "2025-03-18",
@@ -138,8 +131,7 @@
         },
         {
             "user_id": 1,
-            "bank_name": "AXIS",
-            "account_no": "4567890123",
+            "account_id": 4,
             "amount": 4000.50,
             "category_id": 1,
             "expense_date": "2025-03-15",
