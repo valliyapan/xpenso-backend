@@ -31,6 +31,7 @@ export async function up (knex) {
     table.string('name').notNullable();
     table.string('password').notNullable();
     table.string('email').notNullable().unique();
+    table.boolean('isEmailVerified').notNullable().defaultTo(false);
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());
   })
