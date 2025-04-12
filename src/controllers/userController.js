@@ -12,7 +12,7 @@ async function markUserEmailVerified(email) {
 }
 
 export async function verifyRegistration(req, res) {
-    const { accessToken } = req.params;
+    const { accessToken } = req.query;
     if (!accessToken) {
         // TODO: Render login page
         return res.status(400).json({ error: 'Access token is invalid' });
@@ -28,8 +28,8 @@ export async function verifyRegistration(req, res) {
             if (isMarked) {
                 // TODO: Render user home page
 
-                const accessToken = getAccessToken({ email });
-                res.cookie('token', accessToken, {
+                const accessToken = getAccessToken({ user: email });
+                res.cookie('accessToken', accessToken, {
                     maxAge: 30 * 60 * 1000,
                     httpOnly: true,
                     sameSite: 'strict'

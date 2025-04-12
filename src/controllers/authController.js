@@ -1,5 +1,6 @@
 import User from '../models/userModel.js';
 import { getAccessToken, verifyAccessToken } from '../utils/token.js';
+import { sendMail } from '../utils/mailer.js';
 
 export async function register(req, res) {
   const { name, password, email } = req.body;
@@ -15,14 +16,26 @@ export async function register(req, res) {
       return res.status(500).json({ error: 'Failed to create user' });
     }
 
-    // Logic to send mail
+    const accessToken = getAccessToken({ user: newUser.email });
+    const subject = 'Xpenso - User Email Verification';
+    const verificationURL = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/verify-registration?accessToken=${accessToken}`;
+    const htmlData = `
+      <p>Welcome to Xpenso. Click the below button to verify your email.</p>
+      <form action="${verificationURL}" method="get">
+        <input type="submit" value="Verify Email" />
+      </form>
+    `;
 
-    return res.status(200).json({ message: 'Verification email sent' });
+    const isMailSent = await sendMail(newUser.email, subject, htmlData);
+    if (isMailSent) {
+      return res.status(200).json({ message: 'Verification email sent' });
+    }
 
   } catch (err) {
     console.error('Error in user registration:', err);
-    return res.status(500).json({ error: 'Internal server error' });
   }
+
+  return res.status(500).json({ error: 'Internal server error' });
 };
 
 export async function login(req, res) {
@@ -34,15 +47,19 @@ export async function login(req, res) {
       return res.status(400).json({ error: 'User does not exist' });
     }
 
-    const isVerifiedUser = await User.verifyUser(user, password);
-    if (!isVerifiedUser) {
+    if (!user.is_email_verified) {
+      return res.status(400).json({ error: 'User email is not verified' });
+    }
+
+    const isValid = await User.verifyUserCredentials(user, password);
+    if (!isValid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
     console.log(`User ${user.name} is verified`);
 
-    const accessToken = getAccessToken({ email: user.email });
-    res.cookie('token', accessToken, {
+    const accessToken = getAccessToken({ user: user.email });
+    res.cookie('accessToken', accessToken, {
       maxAge: 30 * 60 * 1000,
       httpOnly: true,
       sameSite: 'strict'
@@ -57,7 +74,7 @@ export async function login(req, res) {
 };
 
 export async function logout(req, res) {
-  const { accessToken } = req.cookie;
+  const { accessToken } = req.cookies;
 
   if (!accessToken) {
     return res.status(401).json({ error: 'User is unauthorized' });
@@ -76,5 +93,6 @@ export async function logout(req, res) {
       return res.status(400).clearCookie('accessToken').json({ error: 'Session timed out'});
     }
   }
+
   return res.status(400).clearCookie('accessToken').json({ error: 'Access token is invalid' });
 };

@@ -1,9 +1,5 @@
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../.env')});
+import './env.js';
+console.log('DEV_DB_HOST:', process.env.DEV_DB_HOST);
 
 /**
  * @type { Object.<string, import("knex").Knex.Config> }

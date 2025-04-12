@@ -1,3 +1,4 @@
+import '../config/env.js';
 import pkg from 'pg';
 import knexFileConfig from '../config/knexfile.js';
 

@@ -16,7 +16,7 @@ class User {
     return user || false;
   };
 
-  static async verifyUser(user, password) {
+  static async verifyUserCredentials(user, password) {
     return await bcrypt.compare(password, user.password);
   }
 
@@ -26,7 +26,7 @@ class User {
       console.log(`Could not mark user email ${email} as verified`);
       return false;
     }
-    await db(User.tableName).where({ id: user.id }).update({ isEmailVerified: true });
+    await db(User.tableName).where({ id: user.id }).update({ is_email_verified: true });
     return true;
   }
 
