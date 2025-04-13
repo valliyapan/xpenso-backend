@@ -18,10 +18,11 @@ export async function register(req, res) {
 
     const accessToken = getAccessToken({ user: newUser.email });
     const subject = 'Xpenso - User Email Verification';
-    const verificationURL = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/verify-registration?accessToken=${accessToken}`;
+    const verificationURL = `${process.env.SERVER_HOST}:${process.env.SERVER_PORT}/users/verify-registration`;
     const htmlData = `
       <p>Welcome to Xpenso. Click the below button to verify your email.</p>
       <form action="${verificationURL}" method="get">
+        <input type="hidden" name="accessToken" value="${accessToken}" />
         <input type="submit" value="Verify Email" />
       </form>
     `;
