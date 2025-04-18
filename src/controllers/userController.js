@@ -78,11 +78,7 @@ async function updateUser(req, res, email) {
     modifiedUser.name = name;
   }
 
-  if (oldPassword) {
-    if (!newPassword) {
-      return res.status(400).json({ error: 'New password cannot be empty' });
-    }
-
+  if (oldPassword && newPassword) {
     if (await User.verifyUserCredentials(user, oldPassword)) {
       if (oldPassword === newPassword) {
         return res.status(400).json({ error: 'New password cannot be same as old password' });
