@@ -110,17 +110,17 @@ async function deleteUser(req, res, email) {
     return res.status(400).json({ error: 'User does not exist' });
   }
 
-  const isValidCredentials = User.verifyUserCredentials(user, password);
+  const isValidCredentials = await User.verifyUserCredentials(user, password);
   if (!isValidCredentials) {
     return res.status(400).json({ error: 'Invalid credentials' });
   }
 
-  const isUserDeleted = User.deleteUser(email);
+  const isUserDeleted = await User.deleteUser(email);
   if (isUserDeleted) {
     return res.status(200).json({ message: 'User deleted successfully' });
   }
 
-  return res.status(400).json({ error: 'User is not deleted' });
+  return res.status(500).json({ error: 'User is not deleted' });
 }
 
 export async function registrationHandler(req, res) {
