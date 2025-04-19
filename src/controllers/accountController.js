@@ -11,7 +11,11 @@ async function accountControllerWrapper(req, res, cb) {
   try {
     const decoded = verifyAccessToken(accessToken);
     if (decoded && decoded.user) {
-      return await cb(req, res, decoded.user);
+      const user = await Users.getUserByEmail(decoded.user);
+      if (!user) {
+        res.status(404).json({ error: 'User does not exist' });
+      }
+      return await cb(req, res, user.id);
     }
   } catch (err) {
     switch (err.name) {
@@ -27,29 +31,14 @@ async function accountControllerWrapper(req, res, cb) {
   }
 }
 
-async function getAccounts(req, res, email) {
-  const response = { success: false, data: [], message: '' };
-
-  const user = await Users.getUserByEmail(email);
-  if (!user) {
-    response.message = 'User does not exist';
-    return res.status(404).json(response);
-  }
-
-  const userId = user.id;
+async function getAccounts(req, res, userId) {
+  const response = { success: true, data: [] };
   const accounts = await Accounts.getByUserId(userId);
-  response.success = true;
   response.data = accounts;
-  return res.status(201).json(response);
+  return res.status(200).json(response);
 }
 
-async function createAccount(req, res, email) {
-  const user = await Users.getUserByEmail(email);
-  if (!user) {
-    res.status(404).json({ error: 'User does not exist' });
-  }
-
-  const userId = user.id;
+async function createAccount(req, res, userId) {
   const accounts = await Accounts.getByUserId(userId);
   if (accounts.length === 10) return res.status(400).json({ error: 'Maximum account creation limit reached' });
 
