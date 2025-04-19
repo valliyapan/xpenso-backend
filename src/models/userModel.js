@@ -16,6 +16,21 @@ class User {
     return user || false;
   };
 
+  static async updateUser(email, modifiedUser) {
+    const { password } = modifiedUser;
+    if (password) {
+      modifiedUser.password = await bcrypt.hash(password, User.saltRounds);
+    }
+    const [updatedUser] = await db(User.tableName).where({ email }).update(modifiedUser).returning('*');
+    return updatedUser || false;
+  }
+
+  static async deleteUser(email) {
+    const resp = await db(User.tableName).where({ email }).del();
+    console.log(resp);
+    return true;
+  }
+
   static async verifyUserCredentials(user, password) {
     return await bcrypt.compare(password, user.password);
   }
