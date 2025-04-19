@@ -51,10 +51,42 @@ async function createAccount(req, res, userId) {
   return res.status(201).json(account);
 }
 
+async function updateBalance(req, res, userId) {
+  const { accountId, balance } = req.body;
+
+  const account = await Accounts.getByAccountId(accountId);
+  if (!account || account.user_id !== userId) return res.status(404).json({ error: 'No such account found' });
+
+  const updatedAccount = await Accounts.updateBalance(accountId, balance);
+  if (!updatedAccount) return res.status(500).json({ error: 'Internal server error' });
+
+  return res.status(200).json(updatedAccount);
+}
+
+async function deleteAccount(req, res, userId) {
+  const { accountId } = req.body;
+
+  const account = await Accounts.getByAccountId(accountId);
+  if (!account || account.user_id !== userId) return res.status(404).json({ error: 'No such account found' });
+
+  const isDeleted = await Accounts.deleteAccount(accountId);
+  if (!isDeleted) return res.status(500).json({ error: 'Internal server error' });
+
+  return res.status(200).json({ message: 'Account deleted successfully', accountId });
+}
+
 export async function getAccountsHandler(req, res) {
   return await accountControllerWrapper(req, res, getAccounts);
 }
 
 export async function createAccountHandler(req, res) {
   return await accountControllerWrapper(req, res, createAccount);
+}
+
+export async function updateBalanceHandler(req, res) {
+  return await accountControllerWrapper(req, res, updateBalance);
+}
+
+export async function deleteAccountHandler(req, res) {
+  return await accountControllerWrapper(req, res, deleteAccount);
 }
