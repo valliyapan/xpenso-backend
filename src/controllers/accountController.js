@@ -15,7 +15,7 @@ async function accountControllerWrapper(req, res, cb) {
       if (!user) {
         res.status(404).json({ error: 'User does not exist' });
       }
-      return await cb(req, res, user.id);
+      return await cb(req, res, user);
     }
   } catch (err) {
     switch (err.name) {
@@ -31,14 +31,15 @@ async function accountControllerWrapper(req, res, cb) {
   }
 }
 
-async function getAccounts(req, res, userId) {
+async function getAccounts(req, res, user) {
   const response = { success: true, data: [] };
-  const accounts = await Accounts.getByUserId(userId);
+  const accounts = await Accounts.getByUserId(user.id);
   response.data = accounts;
   return res.status(200).json(response);
 }
 
-async function createAccount(req, res, userId) {
+async function createAccount(req, res, user) {
+  const userId = user.id;
   const accounts = await Accounts.getByUserId(userId);
   if (accounts.length === 10) return res.status(400).json({ error: 'Maximum account creation limit reached' });
 
@@ -51,11 +52,15 @@ async function createAccount(req, res, userId) {
   return res.status(201).json(account);
 }
 
-async function updateBalance(req, res, userId) {
-  const { accountId, balance } = req.body;
+async function updateBalance(req, res, user) {
+  const { accountId, balance, password } = req.body;
+
+  if (!await Users.verifyUserCredentials(user, password)) {
+    return res.status(400).json({ error: 'Invalid user credentials' });
+  }
 
   const account = await Accounts.getByAccountId(accountId);
-  if (!account || account.user_id !== userId) return res.status(404).json({ error: 'No such account found' });
+  if (!account || account.user_id !== user.id) return res.status(404).json({ error: 'No such account found' });
 
   const updatedAccount = await Accounts.updateBalance(accountId, balance);
   if (!updatedAccount) return res.status(500).json({ error: 'Internal server error' });
@@ -63,11 +68,15 @@ async function updateBalance(req, res, userId) {
   return res.status(200).json(updatedAccount);
 }
 
-async function deleteAccount(req, res, userId) {
-  const { accountId } = req.body;
+async function deleteAccount(req, res, user) {
+  const { accountId, password } = req.body;
+
+  if (!await Users.verifyUserCredentials(user, password)) {
+    return res.status(400).json({ error: 'Invalid user credentials' });
+  }
 
   const account = await Accounts.getByAccountId(accountId);
-  if (!account || account.user_id !== userId) return res.status(404).json({ error: 'No such account found' });
+  if (!account || account.user_id !== user.id) return res.status(404).json({ error: 'No such account found' });
 
   const isDeleted = await Accounts.deleteAccount(accountId);
   if (!isDeleted) return res.status(500).json({ error: 'Internal server error' });
