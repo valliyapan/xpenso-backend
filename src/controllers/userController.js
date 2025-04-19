@@ -100,7 +100,7 @@ async function updateUser(req, res, email) {
     }
   }
 
-  return res.status(200).json({ user });
+  return res.status(200).json(user);
 }
 
 async function deleteUser(req, res, email) {
@@ -124,7 +124,7 @@ async function deleteUser(req, res, email) {
 }
 
 export async function registrationHandler(req, res) {
-  req.cookies = req.queries; // As token is fetched only from cookies in wrapper
+  req.cookies = req.query; // As token is fetched only from cookies in wrapper
   return await userControllerWrapper(req, res, verifyRegistration);
 }
 

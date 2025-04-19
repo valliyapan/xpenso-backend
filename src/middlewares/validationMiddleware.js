@@ -50,4 +50,5 @@ export async function validateUserUpdate(req, res, next) {
       return res.status(400).json({ error: 'Password must be between 6 and 25 characters long' });
     }
   }
+  next();
 }

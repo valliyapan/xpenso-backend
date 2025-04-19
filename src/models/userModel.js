@@ -17,6 +17,10 @@ class User {
   };
 
   static async updateUser(email, modifiedUser) {
+    const { password } = modifiedUser;
+    if (password) {
+      modifiedUser.password = await bcrypt.hash(password, User.saltRounds);
+    }
     const [updatedUser] = await db(User.tableName).where({ email }).update(modifiedUser).returning('*');
     return updatedUser || false;
   }
