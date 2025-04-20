@@ -68,12 +68,26 @@ export async function validateBankAccountCreation(req, res, next) {
 export async function validateAccountUpdate(req, res, next) {
   const { accountId, balance, password } = req.body;
 
-  if(typeof accountId !== 'number' || accountId <= 0) {
+  if (typeof accountId !== 'number' || accountId <= 0) {
     return res.status(400).json({ error: 'Invalid bank account ID' });
   }
 
   if (typeof balance !== 'number' || balance < 0) {
     return res.status(400).json({ error: 'Invalid account balance' });
+  }
+
+  if (typeof password !== 'string' || password.length < 6 || password.length > 25) {
+    return res.status(400).json({ error: 'Invalid user credentials' });
+  }
+
+  next();
+}
+
+export async function validateAccountDelete(req, res, next) {
+  const { accountId, password } = req.body;
+
+  if (typeof accountId !== 'number' || accountId <= 0) {
+    return res.status(400).json({ error: 'Invalid bank account ID' });
   }
 
   if (typeof password !== 'string' || password.length < 6 || password.length > 25) {
