@@ -27,8 +27,7 @@ class User {
 
   static async deleteUser(email) {
     const resp = await db(User.tableName).where({ email }).del();
-    console.log(resp);
-    return true;
+    return resp;
   }
 
   static async verifyUserCredentials(user, password) {
