@@ -51,6 +51,16 @@ export async function validateUserUpdate(req, res, next) {
   next();
 }
 
+export async function validateUserDelete(req, res, next) {
+  const { password } = req.body;
+
+  if (typeof password !== 'string' || password.length < 6 || password.length > 25) {
+    return res.status(400).json({ error: 'Invalid user credentials' });
+  }
+
+  next();
+}
+
 export async function validateBankAccountCreation(req, res, next) {
   const { accountNo, bankName, balance } = req.body;
 
