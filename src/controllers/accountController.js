@@ -46,10 +46,19 @@ async function createAccount(req, res, user) {
   const { accountNo, bankName, balance } = req.body;
   if (!balance) balance = 0;
 
-  const account = await Accounts.create({ account_no: accountNo, bank_name: bankName, user_id: userId, balance });
-  if (!account) return res.status(500).json({ error: 'Account creation failed' });
+  try {
+    const account = await Accounts.create({ account_no: accountNo, bank_name: bankName, user_id: userId, balance });
+    if (account) return res.status(201).json(account);
 
-  return res.status(201).json(account);
+  } catch (err) {
+    if (err.message.includes('duplicate key value violates unique constraint')) {
+      return res.status(400).json({ error: 'Account already exists' });
+    } else {
+      console.log('Error in account creation:', err);
+    }
+  }
+
+  return res.status(500).json({ error: 'Account creation failed' });
 }
 
 async function updateBalance(req, res, user) {

@@ -14,17 +14,17 @@ class Accounts {
     }
 
     static async getByAccountId(accountId) {
-        const [account] = await db(Accounts.tableName).where({ account_id: accountId }).select('*');
+        const [account] = await db(Accounts.tableName).where({ id: accountId }).select('*');
         return account || false;
     }
 
     static async updateBalance(accountId, balance) {
-        const [account] = await db(Accounts.tableName).where({ account_id: accountId }).update({ balance }).returning('*');
+        const [account] = await db(Accounts.tableName).where({ id: accountId }).update({ balance, updated_at: new Date() }).returning('*');
         return account || false;
     }
 
     static async deleteAccount(accountId) {
-        const resp = await db(Accounts.tableName).where({ account_id: accountId }).del();
+        const resp = await db(Accounts.tableName).where({ id: accountId }).del();
         return resp;
     }
 }
