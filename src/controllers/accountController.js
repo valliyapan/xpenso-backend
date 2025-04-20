@@ -44,7 +44,6 @@ async function createAccount(req, res, user) {
   if (accounts.length === 10) return res.status(400).json({ error: 'Maximum account creation limit reached' });
 
   const { accountNo, bankName, balance } = req.body;
-  if (!balance) balance = 0;
 
   try {
     const account = await Accounts.create({ account_no: accountNo, bank_name: bankName, user_id: userId, balance });
