@@ -106,3 +106,11 @@ export async function validateAccountDelete(req, res, next) {
 
   next();
 }
+
+export async function validateExpenseCreation(req, res, next) {
+  
+}
+
+export async function validateExpenseUpdate(req, res, next) {
+  
+}
