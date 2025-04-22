@@ -43,7 +43,7 @@ export async function up (knex) {
     table.specificType('balance', 'MONEY').notNullable().defaultTo(0);
     table.date('last_sync');
     table.timestamp('created_at').defaultTo(knex.fn.now());
-    table.timestamp('update_at').defaultTo(knex.fn.now());
+    table.timestamp('updated_at').defaultTo(knex.fn.now());
     table.foreign('user_id', 'fk_accounts_user').references('id').inTable('users').onDelete('CASCADE');
     table.unique(['bank_name', 'account_no']);
   })
