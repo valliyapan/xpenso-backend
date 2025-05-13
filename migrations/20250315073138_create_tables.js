@@ -59,7 +59,7 @@ export async function up (knex) {
     table.integer('category_id').notNullable();
     table.specificType('amount', 'MONEY').notNullable();
     table.string('name').notNullable();
-    table.string('comment').notNullable();
+    table.string('comment');
     table.string('debit_to');
     table.timestamp('created_at').defaultTo(knex.fn.now());
     table.timestamp('updated_at').defaultTo(knex.fn.now());

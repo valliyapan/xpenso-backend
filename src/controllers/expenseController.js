@@ -1,5 +1,6 @@
 import Expenses from '../models/expenseModel.js';
 import Users from '../models/userModel.js';
+import Accounts from '../models/accountModel.js';
 import { verifyAccessToken } from '../utils/token.js';
 
 async function expenseControllerWrapper(req, res, cb) {
@@ -32,19 +33,91 @@ async function expenseControllerWrapper(req, res, cb) {
 }
 
 async function getExpenses(req, res, user) {
-  
+  const userId = user.id;
+  const expenses = await Expenses.getAllExpenses(userId);
+  return res.status(200).json(expenses);
 }
 
 async function createExpense(req, res, user) {
-  
+  const userId = user.id;
+  const { accountId, expenseDate, amount, categoryId, name, comment, debitTo } = req.body;
+  if (!expenseDate) expenseDate = new Date();
+  const account = await Accounts.getByAccountId(accountId);
+  if (!account) {
+    return res.status(404).json({ error: 'Account not found' });
+  }
+  if (account.user_id !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access to other account' });
+  }
+
+  const expenseData = {
+    user_id: userId,
+    account_id: accountId,
+    expense_date: expenseDate,
+    amount,
+    category_id: categoryId,
+    name,
+    comment,
+    debit_to: debitTo
+  };
+
+  if (!expenseData.comment) delete expenseData.comment;
+  if (!expenseData.debit_to) delete expenseData.debit_to;
+
+  const expense = await Expenses.createExpense(expenseData);
+  if (!expense) {
+    return res.status(500).json({ error: 'Failed to create expense' });
+  }
+
+  return res.status(201).json(expense);
 }
 
 async function updateExpense(req, res, user) {
-  
+  const userId = user.id;
+  const { expenseId, expenseDate, amount, name, comment, debitTo } = req.body;
+  const expense = await Expenses.getExpenseById(expenseId);
+  if (!expense) {
+    return res.status(404).json({ error: 'Expense not found' });
+  }
+  if (expense.user_id !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access to other expense' });
+  }
+
+  const updatedData = {};
+
+  if (expenseDate && expenseDate !== expense.expenseDate) updatedData.expenseDate = expenseDate;
+  if ((amount || amount === 0) && amount !== expense.amount) updatedData.amount = amount;
+  if (name && name !== expense.name) updatedData.name = name;
+  if (comment && comment !== expense.comment) updatedData.comment = comment;
+  if (debitTo && debitTo !== expense.debitTo) updatedData.debitTo = debitTo;
+
+  if (Object.keys(updatedData).length === 0) {
+    return res.status(200).json({ message: 'No changes made to expense', expenseId });
+  }
+
+  const updatedExpense = await Expenses.updateExpense(expenseId, updatedData);
+  if (!updatedExpense) {
+    return res.status(500).json({ error: 'Failed to update expense' });
+  }
+
+  return res.status(200).json(updatedExpense);
 }
 
 async function deleteExpense(req, res, user) {
-  
+  const userId = user.id;
+  const { expenseId } = req.body;
+  const expense = await Expenses.getExpenseById(expenseId);
+  if (!expense) {
+    return res.status(404).json({ error: 'Expense not found' });
+  }
+  if (expense.user_id !== userId) {
+    return res.status(403).json({ error: 'Unauthorized access to other expense' });
+  }
+
+  const isDeleted = await Expenses.deleteExpense(expenseId);
+  if (!isDeleted) return res.status(500).json({ error: 'Internal server error' });
+
+  return res.status(200).json({ message: 'Expense deleted successfully', expenseId });
 }
 
 export async function getExpenseHandler(req, res) {
