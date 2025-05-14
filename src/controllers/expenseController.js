@@ -40,7 +40,7 @@ async function getExpenses(req, res, user) {
 
 async function createExpense(req, res, user) {
   const userId = user.id;
-  const { accountId, expenseDate, amount, categoryId, name, comment, debitTo } = req.body;
+  let { accountId, expenseDate, amount, categoryId, name, comment, debitTo } = req.body;
   if (!expenseDate) expenseDate = new Date();
   const account = await Accounts.getByAccountId(accountId);
   if (!account) {
@@ -74,7 +74,7 @@ async function createExpense(req, res, user) {
 
 async function updateExpense(req, res, user) {
   const userId = user.id;
-  const { expenseId, expenseDate, amount, name, comment, debitTo } = req.body;
+  let { expenseId, expenseDate, amount, name, comment, debitTo } = req.body;
   const expense = await Expenses.getExpenseById(expenseId);
   if (!expense) {
     return res.status(404).json({ error: 'Expense not found' });
@@ -83,17 +83,30 @@ async function updateExpense(req, res, user) {
     return res.status(403).json({ error: 'Unauthorized access to other expense' });
   }
 
+  if (typeof expense.amount === 'string' && !Number(expense.amount[0])) {
+    expense.amount = Number(expense.amount.slice(1));
+  }
+  amount = Number(amount);
+
   const updatedData = {};
 
-  if (expenseDate && expenseDate !== expense.expenseDate) updatedData.expenseDate = expenseDate;
+  // need to fix the date format
+  expense.expense_date = expense.expense_date.toISOString();
+
+  console.log('Expense date:', expense.expense_date, typeof expense.expense_date);
+
+  if (expenseDate && expenseDate !== expense.expense_date) updatedData.expense_date = expenseDate;
   if ((amount || amount === 0) && amount !== expense.amount) updatedData.amount = amount;
   if (name && name !== expense.name) updatedData.name = name;
   if (comment && comment !== expense.comment) updatedData.comment = comment;
-  if (debitTo && debitTo !== expense.debitTo) updatedData.debitTo = debitTo;
+  if (debitTo && debitTo !== expense.debit_to) updatedData.debit_to = debitTo;
 
   if (Object.keys(updatedData).length === 0) {
     return res.status(200).json({ message: 'No changes made to expense', expenseId });
   }
+
+  console.log('Updated data:', updatedData);
+  updatedData.updated_at = new Date();
 
   const updatedExpense = await Expenses.updateExpense(expenseId, updatedData);
   if (!updatedExpense) {

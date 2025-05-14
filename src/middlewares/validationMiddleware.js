@@ -62,13 +62,15 @@ export async function validateUserDelete(req, res, next) {
 }
 
 export async function validateBankAccountCreation(req, res, next) {
-  const { accountNo, bankName, balance } = req.body;
+  let { accountNo, bankName, balance } = req.body;
 
   if (typeof accountNo !== 'string' || accountNo.length === 0 || typeof bankName !== 'string' || bankName.length === 0) {
     return res.status(400).json({ error: 'Account number or bank name is invalid' });
   }
 
-  if (typeof balance !== 'number' || balance < 0) {
+  balance = Number(balance);
+
+  if (!balance || balance < 0) {
     return res.status(400).json({ error: 'Invalid account balance' });
   }
 
@@ -76,13 +78,15 @@ export async function validateBankAccountCreation(req, res, next) {
 }
 
 export async function validateAccountUpdate(req, res, next) {
-  const { accountId, balance, password } = req.body;
+  let { accountId, balance, password } = req.body;
 
   if (typeof accountId !== 'number' || accountId <= 0) {
     return res.status(400).json({ error: 'Invalid bank account ID' });
   }
 
-  if (typeof balance !== 'number' || balance < 0) {
+  balance = Number(balance);
+
+  if (!balance || balance < 0) {
     return res.status(400).json({ error: 'Invalid account balance' });
   }
 
@@ -108,9 +112,9 @@ export async function validateAccountDelete(req, res, next) {
 }
 
 export async function validateExpenseCreation(req, res, next) {
-  
+  next();
 }
 
 export async function validateExpenseUpdate(req, res, next) {
-  
+  next();
 }
