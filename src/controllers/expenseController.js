@@ -2,6 +2,7 @@ import Expenses from '../models/expenseModel.js';
 import Users from '../models/userModel.js';
 import Accounts from '../models/accountModel.js';
 import { verifyAccessToken } from '../utils/token.js';
+import { convertToExpenseDate } from '../utils/date.js';
 
 async function expenseControllerWrapper(req, res, cb) {
   const { accessToken } = req.cookies;
@@ -35,6 +36,10 @@ async function expenseControllerWrapper(req, res, cb) {
 async function getExpenses(req, res, user) {
   const userId = user.id;
   const expenses = await Expenses.getAllExpenses(userId);
+  expenses.forEach(expense => {
+    // console.log('Expense date:', expense.expense_date, typeof expense.expense_date);
+    expense.expense_date = convertToExpenseDate(expense.expense_date);
+  });
   return res.status(200).json(expenses);
 }
 
@@ -90,10 +95,11 @@ async function updateExpense(req, res, user) {
 
   const updatedData = {};
 
-  // need to fix the date format
-  expense.expense_date = expense.expense_date.toISOString();
+  // console.log('Expense date:', expense.expense_date, typeof expense.expense_date);
 
-  console.log('Expense date:', expense.expense_date, typeof expense.expense_date);
+  expense.expense_date = convertToExpenseDate(expense.expense_date);
+
+  // console.log('Expense date:', expense.expense_date, typeof expense.expense_date);
 
   if (expenseDate && expenseDate !== expense.expense_date) updatedData.expense_date = expenseDate;
   if ((amount || amount === 0) && amount !== expense.amount) updatedData.amount = amount;
@@ -112,6 +118,8 @@ async function updateExpense(req, res, user) {
   if (!updatedExpense) {
     return res.status(500).json({ error: 'Failed to update expense' });
   }
+
+  updatedExpense.expense_date = convertToExpenseDate(updatedExpense.expense_date);
 
   return res.status(200).json(updatedExpense);
 }
